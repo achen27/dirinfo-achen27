@@ -9,8 +9,7 @@
 #include <errno.h>
 #include "dirinfo.h"
 
-
-void metaPermissions(char * file){
+void metaPermissions(char * file){ //add permissions and file size
   struct stat stat_buff;
   stat(file, &stat_buff);
   int perm = stat_buff.st_mode % 01000;
@@ -32,14 +31,13 @@ void metaPermissions(char * file){
 
 void listRegFiles(char * path){
   DIR * stream = opendir(path);
-  if (stream == NULL) {
+  if (stream == NULL) { //checking if directory exists
     printf ("Error opening directory %s: %s\n", path, strerror(errno));
   }
   struct dirent * entry = readdir(stream);
-  struct stat stat_buff;
   printf("Regular Files:\n");
   while (entry != NULL){
-    if(entry->d_type == 8){
+    if(entry->d_type == 8){ //checking file type
       metaPermissions(entry->d_name);
       printf("%s\n", entry->d_name);
     }
@@ -49,14 +47,13 @@ void listRegFiles(char * path){
 
 void listDirectory(char * path){
   DIR * stream = opendir(path);
-  if (stream == NULL) {
+  if (stream == NULL) { //checking if directory exists
     printf ("Error opening directory %s: %s\n", path, strerror(errno));
   }
   struct dirent * entry = readdir(stream);
-  struct stat stat_buff;
   printf("Directories:\n");
   while (entry != NULL){
-    if(entry->d_type == 4){
+    if(entry->d_type == 4){ //checking file type
       metaPermissions(entry->d_name);
       printf("%s\n", entry->d_name);
     }
@@ -64,7 +61,7 @@ void listDirectory(char * path){
   }
 }
 
-void listFiles(char * path){
+void listFiles(char * path){ //combines reg and dir types
   listDirectory(path);
   listRegFiles(path);
 }
@@ -78,7 +75,7 @@ int totalSize(char * path){
   int size = 0;
   struct stat stat_buff;
   while (entry != NULL){
-    stat(entry->d_name, &stat_buff);
+    stat(entry->d_name, &stat_buff); //checks metadata of file for size
     size += stat_buff.st_size;
     entry = readdir(stream);
   }
