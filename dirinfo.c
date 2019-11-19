@@ -43,6 +43,7 @@ void listRegFiles(char * path){
     }
     entry = readdir(stream);
   }
+  closedir(stream);
 }
 
 void listDirectory(char * path){
@@ -59,6 +60,7 @@ void listDirectory(char * path){
     }
     entry = readdir(stream);
   }
+  closedir(stream);
 }
 
 void listFiles(char * path){ //combines reg and dir types
@@ -79,6 +81,7 @@ int totalSize(char * path){
     size += stat_buff.st_size;
     entry = readdir(stream);
   }
+  closedir(stream);
   return size;
 }
 
